@@ -1,0 +1,4 @@
+- hosts: main_node
+  remote_user: koxrel
+  roles:
+  - { role: sonarqube-docker }

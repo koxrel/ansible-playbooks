@@ -1,0 +1,28 @@
+- name: copy docker-compose file
+  copy:
+    src: docker-compose.yml
+    dest: docker_apps/sonarqube/
+    owner: koxrel
+    group: docker
+    mode: 0644
+
+- name: Set variables
+  command: sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536 && ulimit -n 65536 && ulimit -u 4096
+  become: yes
+
+- name: stop docker-compose
+  command:
+    cmd: docker-compose down
+    chdir: docker_apps/sonarqube/
+
+- name: launch docker-compose
+  command:
+    cmd: docker-compose up -d
+    chdir: docker_apps/sonarqube/
+
+- name: wait for startup
+  command: sleep 15
+
+- name: check sonarqube
+  uri:
+    url: http://localhost:9000

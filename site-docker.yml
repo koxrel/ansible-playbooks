@@ -1,0 +1,5 @@
+- hosts: main_node
+  remote_user: koxrel
+  become: yes
+  roles:
+  - { role: docker }

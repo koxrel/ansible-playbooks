@@ -1,0 +1,30 @@
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Install docker-ce
+  apt: update_cache=yes name=docker-ce state=latest
+
+- name: Install docker-ce-cli
+  apt: update_cache=yes name=docker-ce-cli state=latest
+
+- name: Install docker-compose
+  apt: update_cache=yes name=docker-compose state=latest
+
+- name: Install containerd
+  apt: update_cache=yes name=containerd.io state=latest
+
+- name: Add koxrel to docker group
+  user:
+    name: koxrel
+    groups: docker
+    append: yes
+
+- name: Run test container
+  command: docker run --rm hello-world
